@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+# coding: utf-8
+import sys
+reload(sys); sys.setdefaultencoding("utf-8")
+import re
+import fileinput
+
+# The list is taken from this Wordpress plugin: https://pl.wordpress.org/plugins/automatic-nbsp/
+NBSP_AFTER = unicode("a i z w o u na np. nt. że do za na ku po ni bo dla czy lub pod ale aby ani nad zaś prof. znad przy spod oraz albo bądź obok choć lecz koło więc przy spoza przez czyli zatem toteż jeżeli dokoła jednak przeto tudzież to jest dlatego ponieważ natomiast mianowicie aczkolwiek")
+
+def prepare_pattern_for_multiple_spaces():
+    return re.compile(" +")
+
+def prepare_pattern_for_nbsp_after_words():
+    phrases = NBSP_AFTER.split()
+    phrases = [p.replace(".","\.") for p in phrases]
+    phrases_alt = u"|".join(phrases)
+    re_string = u"({}) +".format(phrases_alt)
+    return re.compile(re_string, flags=re.U)
+
+def prepare_pattern_for_nbsp_after_numbers():
+    return re.compile("(\d+) +")
+
+def main():
+    re_spaces = prepare_pattern_for_multiple_spaces()
+    re_words = prepare_pattern_for_nbsp_after_words()
+    re_numbers = prepare_pattern_for_nbsp_after_numbers()
+
+    # TODO: add argparse for choosing custom non-breaking space symbol
+    # http://stackoverflow.com/questions/1450393/how-do-you-read-from-stdin-in-python#comment40006368_1454400
+
+    nbsp_symbol = "&nbsp;"
+    for line in fileinput.input():
+        s = line
+        s = re_spaces.sub(" ", s)
+        s = re_words.sub(r"\1"+nbsp_symbol, s)
+        s = re_numbers.sub(r"\1"+nbsp_symbol, s)
+        print s
+
+if __name__ == "__main__":
+    main()
