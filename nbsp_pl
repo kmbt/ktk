@@ -35,7 +35,7 @@ def main():
         s = re_spaces.sub(" ", s)
         s = re_words.sub(r"\1"+nbsp_symbol, s)
         s = re_numbers.sub(r"\1"+nbsp_symbol, s)
-        print s
+        sys.stdout.write(s)
 
 if __name__ == "__main__":
     main()
