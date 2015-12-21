@@ -13,13 +13,13 @@ def prepare_pattern_for_multiple_spaces():
 
 def prepare_pattern_for_nbsp_after_words():
     phrases = NBSP_AFTER.split()
-    phrases = [p.replace(".","\.") for p in phrases]
+    phrases = [p.replace(".",r"\.") for p in phrases]
     phrases_alt = u"|".join(phrases)
-    re_string = u"({}) +".format(phrases_alt)
-    return re.compile(re_string, flags=re.U)
+    re_string = r"\b" + u"({}) +".format(phrases_alt)
+    return re.compile(re_string, flags=re.U | re.I)
 
 def prepare_pattern_for_nbsp_after_numbers():
-    return re.compile("(\d+) +")
+    return re.compile(r"\b(\d+) +")
 
 def main():
     re_spaces = prepare_pattern_for_multiple_spaces()
@@ -30,8 +30,8 @@ def main():
     # http://stackoverflow.com/questions/1450393/how-do-you-read-from-stdin-in-python#comment40006368_1454400
 
     nbsp_symbol = "&nbsp;"
-    for line in fileinput.input():
-        s = line
+    for line in fileinput.input(openhook=fileinput.hook_encoded("utf-8")):
+        s = unicode(line)
         s = re_spaces.sub(" ", s)
         s = re_words.sub(r"\1"+nbsp_symbol, s)
         s = re_numbers.sub(r"\1"+nbsp_symbol, s)
