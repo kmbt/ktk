@@ -1,20 +1,11 @@
-#!/usr/local/bin/fontforge
+#!/usr/bin/env fontforge
 #
-# The following code is taken from https://github.com/shimarulin/otf2ttf
+# The following code is taken from http://www.stuermer.ch/blog/convert-otf-to-ttf-font-on-ubuntu.html
 #
+# Quick and dirty hack: converts a font to truetype (.ttf)
+Print("Opening "+$1);
 Open($1);
-fontFile = $fontname+".ttf";
-Print('{');
-Print('    "fontSourceFile":    "' + $1 + '",');
-Print('    "fontName":    "' + $fontname + '",');
-Print('    "familyName":  "' + $familyname + '",');
-Print('    "fullName":    "' + $fullname + '",');
-Print('    "fontVersion": "' + $fontversion + '",');
-Print('    "fontFile": "' + fontFile + '",');
-Print('    "fontPath": "' + $2 + '",');
-Print('    "copyright":   "' + $copyright + '"');
-Print('}');
-
-#Generate($1:h+"/"+$fontname+".ttf");
-Generate($2+"/"+fontFile);
+Print("Saving "+$1:r+".ttf");
+Generate($1:r+".ttf");
 Quit(0);
+
