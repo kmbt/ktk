@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#mogrify -thumbnail '1024x1024^>' -gravity center -extent 1024x1024 -strip -interlace Plane -quality 85% $* 
+mogrify -resize '1024x1024>' -gravity center -strip -interlace Plane -quality 85% $* 
